@@ -1,16 +1,20 @@
 from src.db_manager import DBManager
 
+
 def main_interface() -> int:
     """Базовый интерфейс, спрашивает у пользователя нужное действие и возвращает его."""
-    user_input = int(input("""1: Получить список всех компаний и количество вакансий у каждой компании.
+    user_input = int(
+        input(
+            """1: Получить список всех компаний и количество вакансий у каждой компании.
 2: Получить список всех вакансий с указанием названия компании, названия вакансии и зарплаты и ссылки на вакансию.
 3: Получить среднюю зарплату по вакансиям.
 4: Получить список всех вакансий, у которых зарплата выше средней по всем вакансиям.
 5: Получить список всех вакансий по ключевому слову.
 6: Выход.
-Ваш выбор: """))
+Ваш выбор: """
+        )
+    )
     return user_input
-
 
 
 def print_employers_and_vacancies(db_manager: DBManager) -> None:
@@ -22,16 +26,18 @@ def print_employers_and_vacancies(db_manager: DBManager) -> None:
 
     print(result)
 
+
 def print_all_vacancies(db_manager: DBManager) -> None:
     """Выводит все вакансии и информацию о каждой."""
     vacancies = db_manager.get_all_vacancies()
     result = ""
     for vac in vacancies:
-        result += f"""\nКомпания: {vac[0]}, Вакансия: {vac[1]}, 
+        result += f"""\nКомпания: {vac[0]}, Вакансия: {vac[1]},
 Зарплата от: {vac[2]} до: {vac[3]},
 Ссылка: {vac[4]}\n"""
 
     print(result)
+
 
 def print_avg_salary(db_manager: DBManager) -> None:
     """Выводит среднюю зарплату по всем вакансиям."""
@@ -39,6 +45,7 @@ def print_avg_salary(db_manager: DBManager) -> None:
     result = f"\nСредняя зарплата: {int(vacancies[0][0])}\n"
 
     print(result)
+
 
 def print_vacancies_with_higher_salary(db_manager: DBManager) -> None:
     """Выводит все вакансии, у которых зарплата выше средней."""
@@ -49,6 +56,7 @@ def print_vacancies_with_higher_salary(db_manager: DBManager) -> None:
 
     print(result)
 
+
 def ask_keyword(db_manager: DBManager) -> str:
     """Запрашивает у пользователя ключевое слово, потом возвращает вакансии по этому слову."""
     keyword = input("Введите ключевое слово: ")
@@ -58,9 +66,8 @@ def ask_keyword(db_manager: DBManager) -> str:
 
     result = ""
     for vac in vacancies:
-        result += f"""\nКомпания: {vac[4]}, Вакансия: {vac[1]}, 
+        result += f"""\nКомпания: {vac[4]}, Вакансия: {vac[1]},
 Зарплата от: {vac[2]} до: {vac[3]},
 Ссылка: {vac[6]}\n"""
 
     return result
-

@@ -173,6 +173,3 @@ def db_ready() -> None:
     vacancies = vacancies_info()
     for vacancy in vacancies:
         add_vacancy(conn, vacancy)
-
-
-
