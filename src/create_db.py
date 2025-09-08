@@ -44,7 +44,6 @@ def get_db_connection() -> extensions.connection:
     """Возвращает соединение с базой данных"""
     try:
         conn: extensions.connection = psycopg2.connect(**db_config)
-        print("Подключение успешно!")
         return conn
     except OperationalError as e:
         print(f"Ошибка подключения к базе данных: {e}")
@@ -70,7 +69,6 @@ def create_tables(conn: extensions.connection) -> None:
             )
         """
         )
-        print("Таблица employers создана/проверена")
 
         cursor.execute(
             """
@@ -79,16 +77,14 @@ def create_tables(conn: extensions.connection) -> None:
                 employer_id INTEGER REFERENCES employers(employer_id),
                 employer_name VARCHAR(255) NOT NULL,
                 name VARCHAR(255) NOT NULL,
-                salary_from VARCHAR(100),
-                salary_to VARCHAR(100),
+                salary_from INTEGER,
+                salary_to INTEGER,
                 url VARCHAR(255)
             )
         """
         )
-        print("Таблица vacancies создана/проверена")
 
         conn.commit()
-        print("База данных готова к использованию!")
 
     except Exception as e:
         print(f"Ошибка: {e}")
@@ -112,7 +108,6 @@ def add_employer(conn: extensions.connection, employer: list) -> None:
         cursor = conn.cursor()
         cursor.execute(command, (employer[0], employer[1], employer[2], employer[3]))
         conn.commit()
-        print(f"Работодатель '{employer[1]}' добавлен/обновлен")
 
     except psycopg2.DatabaseError as e:
         conn.rollback()
@@ -154,7 +149,6 @@ def add_vacancy(conn: extensions.connection, vacancy: list) -> None:
             ),
         )
         conn.commit()
-        print(f"Вакансия '{vacancy[3]}' добавлена")
 
     except psycopg2.DatabaseError as e:
         conn.rollback()
@@ -170,12 +164,15 @@ def add_vacancy(conn: extensions.connection, vacancy: list) -> None:
 def db_ready() -> None:
     """Объединяет весь функционал api и db."""
     create_db()
+    print("Пожалуйста, подождите...")
     conn = get_db_connection()
     create_tables(conn)
     companies = employers_info()
-    print(companies)
     for employer in companies:
         add_employer(conn, employer)
     vacancies = vacancies_info()
     for vacancy in vacancies:
         add_vacancy(conn, vacancy)
+
+
+
