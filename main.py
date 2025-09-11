@@ -29,5 +29,6 @@ def main() -> None:
         except Exception as e:
             print(f"Произошла ошибка: {e}")
 
-if __name__ == main:
+
+if __name__ == "__main__":
     main()
